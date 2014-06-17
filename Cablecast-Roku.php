@@ -27,10 +27,10 @@ $xmlpath = "/home/brimfieldtv/public_html/roku/xml/"; // path to xml file on ser
 $imagepath = "/home/brimfieldtv/public_html/roku/images/"; // path to image directory
 date_default_timezone_set('America/New_York');
 
+// End Configure
+
 // We need a count of the video files for the Roku 
 	$counter = 0;
-
-// End Configure
 
 // Retrieve VOD data from CableCast
 $client = new SoapClient( $server . "CablecastWS/CablecastWS.asmx?WSDL");  // Creates New SOAP client using WSDL file
