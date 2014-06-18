@@ -33,7 +33,7 @@ date_default_timezone_set('America/New_York');
 	$counter = 0;
 
 // Retrieve VOD data from CableCast
-$client = new SoapClient( $server . "CablecastWS/CablecastWS.asmx?WSDL");  // Creates New SOAP client using WSDL file
+$client = new SoapClient($server . "CablecastWS/CablecastWS.asmx?WSDL");  // Creates New SOAP client using WSDL file
 
 $searchDate = date("Y-m-d")."T12:00:00";
 
@@ -70,7 +70,7 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 	   fwrite($fh, $stringData);
 	   $stringData = "<feed>" . "\n";
 	   fwrite($fh, $stringData);	   
-	   $stringData = "<resultLength>TTLCOUNT</resultLength>" . "\n";
+	   $stringData = "<resultLength>TEMPCOUNT</resultLength>" . "\n";
 	   fwrite($fh, $stringData);
 	   $stringData = "<endIndex>TTLCOUNT</endIndex>" . "\n";
 	   fwrite($fh, $stringData);
@@ -154,6 +154,18 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 
 	// Retrieve image off CableCast and resize
 		$image = new SimpleImage();
+	// HD image exist?
+		if (file_exists($imgHD)) {
+  } else {
+  		$image->load($url);
+		$image->resize(290,218);
+		$image->save($imgHD);
+	}	
+		if (file_exists($imgSD)) {
+  } else {		
+		$image->resize(214,144);
+		$image->save($imgSD);
+	}		
 		$image->load($url);
 		$image->resize(290,218);
 		$image->save($imgHD);
