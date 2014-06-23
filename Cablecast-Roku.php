@@ -1,19 +1,11 @@
 <?php
 
-// CableCastRoku 0.0.1
-// 6-16-14
+// CableCastRoku 0.0.2
+// 6-23-14
 // By Rob Mahlert
 //
 // Based off VODdisply.php by Ray Tiley and uses SimpleImage by Simon Jarvis
-// 
-// Turn off output buffering
-ini_set('output_buffering', 'off');
-
-// Print to screen informing this will take a bit..
-// Remove after testing and using nightly cron
-echo "Processing...<br/>";
-ob_flush();
-flush();
+// Thanks to Bryan Harley for the help and 'Escape ampersand' fix
 
 // Call file to resize images
 include('SimpleImage.php');
@@ -28,6 +20,11 @@ $imagepath = "/home/brimfieldtv/public_html/roku/images/"; // path to image dire
 date_default_timezone_set('America/New_York');
 
 // End Configure
+
+//Escape ampersand
+function xmlEscape($stringData) {
+return str_replace(array('&'), array('&amp;'), $stringData);
+} 
 
 // We need a count of the video files for the Roku 
 	$counter = 0;
@@ -90,7 +87,7 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 	   
 	   // Write title of file
 	   $stringData = "<title>". $vod->Title . "</title>" . "\n";
-	   fwrite($fh, $stringData);
+	   fwrite($fh, xmlEscape($stringData));
 	   
 	   // Show ID
 	   $stringData = "<contentId>". $vod->ShowID . "</contentId>" . "\n";
@@ -122,15 +119,15 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 	   
 	   // URL to CableCast VOD stream
 	   $stringData = "<streamUrl>" . $vod->StreamingFileURL . "</streamUrl>" . "\n";
-	   fwrite($fh, $stringData);
+	   fwrite($fh, xmlEscape($stringData));
 	   
 	   // End Media Tag section
 	   $stringData = "</media>" . "\n";
 	   fwrite($fh, $stringData);
 	   
-	   // Description of the video (Blank for now)
-	   $stringData = "<synopsis></synopsis>" . "\n";
-	   fwrite($fh, $stringData);
+	   // Description of the video
+	   $stringData = "<synopsis> . $vod->Comments . </synopsis>" . "\n";
+	   fwrite($fh, xmlEscape($stringData));
 	   
 	   // Needs to match in channel package files on Roku - Categories.brs
 	   $stringData = "<genres>Meetings</genres>" . "\n";
@@ -154,7 +151,8 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 
 	// Retrieve image off CableCast and resize
 		$image = new SimpleImage();
-	// HD image exist?
+		
+  // HD image exist?
 		if (file_exists($imgHD)) {
   } else {
   		$image->load($url);
@@ -166,21 +164,10 @@ $stringData = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' . "\n";
 		$image->resize(214,144);
 		$image->save($imgSD);
 	}		
-		$image->load($url);
-		$image->resize(290,218);
-		$image->save($imgHD);
-		$image->resize(214,144);
-		$image->save($imgSD);
-		
 	
 	// Back to next video file
-	
-	// For  little feedback while testing - note: will display when done processing ALL 
-	// Remove after testing and using nightly cron
- 	echo "Added VOD File:" . $vod->ShowID . "<br/>";
-	ob_flush();
-	flush();
-	
+
+
     }
 
 // Finish xml file
