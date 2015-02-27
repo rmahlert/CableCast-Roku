@@ -2,3 +2,6 @@ CableCast-Roku
 ==============
 
 This script will pull the VOD information off of the CableCast server and write a xml for a Roku Channel
+
+You also need to create the Roku Channel package..
+
