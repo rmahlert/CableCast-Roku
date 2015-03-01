@@ -1,6 +1,7 @@
 CableCast-Roku
 ==============
 
+<<<<<<< HEAD
 This script will pull the VOD information off of a Tightrope CableCast server and write a xml for a Roku Channel.
 
 You also need to create the Roku Channel package.. (working on a basic channel)
@@ -30,3 +31,7 @@ I have my setup in directory named 'roku' and keep the two files and the images 
 
 Setup a cronscipt to run the php file daily to update your xml files.
 You can also just point your browser to the file to run the file. 
+=======
+This script will pull the VOD information off of a Tighrope CableCast server and write a xml for a Roku Channel.
+
+>>>>>>> origin/master
